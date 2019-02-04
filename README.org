@@ -1,0 +1,7 @@
+* freeradius-mode
+Emcas major mode for editing [[https://github.com/FreeRADIUS/freeradius-server][FreeRadius]] server config files.
+
+* Features 
+** Syntax highlighting
+
+* Installation
