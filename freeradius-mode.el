@@ -4,6 +4,13 @@
 
 ;;; Code:
 
+(defvar freeradius-mode-hook nil)
+
+(defcustom freeradius-indent-offset 4
+  "Indent freeradius unlang code by this number of spaces."
+  :type 'integer
+  :group 'freeradius-mode)
+
 (defconst fr/keywords-regexp
   (regexp-opt(
 			  list "if"
@@ -68,11 +75,17 @@
 "A map of regular expressions to font-lock faces.")
 
 
+(defun get-indent-level()
+  "Get the current indentation level."
+  (car (syntax-ppss)))
+
 (defun fr/indent-function ()
   "Basic indentation handling."
   (save-excursion
     (beginning-of-line)
-    (indent-line-to (* 2 (car (syntax-ppss))))))
+	(search-forward "}" (line-end-position) t)
+	(indent-line-to
+	 (* freeradius-indent-offset (get-indent-level)))))
 
 ;;;###autoload
 (define-derived-mode freeradius-mode fundamental-mode "freeradius mode"
@@ -89,11 +102,7 @@
   ;; code for syntax highlighting
   (setq-local font-lock-defaults
 			  '(fr/font-lock-definitions))
-  (setq-local indent-line-function 'fr/indent-function)
-  )
-
-;;;###autoload
-(add-to-list 'auto-mode-alist '(".*raddb.*\\'" . freeradius-mode))
+  (setq-local indent-line-function 'fr/indent-function))
 
 (provide 'freeradius-mode)
 ;;; freeradius-mode.el ends here
