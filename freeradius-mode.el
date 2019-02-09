@@ -1,5 +1,9 @@
 ;;; freeradius-mode.el --- major mode for FreeRadius server config files
 
+;; URL: https://github.com/VersBinarii/freeradius-mode
+;; Version: 1.0.0
+;; Package-Requires: ((emacs "24.4"))
+
 ;;; Commentary:
 
 ;; This major-mode provides syntax highlighting and indentation handling
@@ -14,7 +18,7 @@
   :type 'integer
   :group 'freeradius-mode)
 
-(defconst fr/keywords-regexp
+(defconst freeradius-keywords-regexp
   (regexp-opt(
 			  list "if"
 				   "else"
@@ -30,7 +34,7 @@
 				   "redundant-load-balance"
 				   "subrequest")))
 
-(defconst fr/constants-regexp
+(defconst freeradius-constants-regexp
   (regexp-opt(
 			  list "reply"
 				   "control"
@@ -46,13 +50,13 @@
 				   "invalid"
 				   "handled")))
 
-(defconst fr/font-lock-definitions
+(defconst freeradius-font-lock-definitions
   (list
    ;; Define all keywords
-   (cons fr/keywords-regexp font-lock-keyword-face)
+   (cons freeradius-keywords-regexp font-lock-keyword-face)
 
    ;; Constants
-   (cons fr/constants-regexp font-lock-constant-face)
+   (cons freeradius-constants-regexp font-lock-constant-face)
 
    ;; Match all variables i.e. &Attr-Foo
    (cons "&\\([-_[:alnum:]]+\\)" ' (1 font-lock-variable-name-face))
@@ -78,17 +82,17 @@
 "A map of regular expressions to font-lock faces.")
 
 
-(defun get-indent-level()
+(defun freeradius-get-indent-level()
   "Get the current indentation level."
   (car (syntax-ppss)))
 
-(defun fr/indent-function ()
+(defun freeradius-indent-function ()
   "Basic indentation handling."
   (save-excursion
     (beginning-of-line)
 	(search-forward "}" (line-end-position) t)
 	(indent-line-to
-	 (* freeradius-indent-offset (get-indent-level)))))
+	 (* freeradius-indent-offset (freeradius-get-indent-level)))))
 
 ;;;###autoload
 (define-derived-mode freeradius-mode fundamental-mode "freeradius mode"
@@ -104,8 +108,9 @@
   
   ;; code for syntax highlighting
   (setq-local font-lock-defaults
-			  '(fr/font-lock-definitions))
-  (setq-local indent-line-function 'fr/indent-function))
+			  '(freeradius-font-lock-definitions))
+  ;; Basic indentation handler
+  (setq-local indent-line-function 'freeradius-indent-function))
 
 (provide 'freeradius-mode)
 ;;; freeradius-mode.el ends here
