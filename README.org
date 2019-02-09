@@ -1,7 +1,23 @@
 * freeradius-mode
-Emcas major mode for editing [[https://github.com/FreeRADIUS/freeradius-server][FreeRadius]] server config files.
+Emacs major mode for editing [[https://github.com/FreeRADIUS/freeradius-server][FreeRadius]] server config files and Unlang.
 
 * Features 
-** Syntax highlighting
+- Syntax highlighting
+- Indentation
 
 * Installation
+
+1) Clone the repo 
+#+BEGIN_SRC bash
+git clone https://github.com/VersBinarii/freeradius-mode
+#+END_SRC
+
+2) Load the file from the cloned repository in your .emacs.d/init.e 
+#+BEGIN_SRC bash
+(load "/path/to/cloned/repo/freeradius-mode.el")
+#+END_SRC
+3) Require it: 
+#+BEGIN_SRC bash
+(require 'freeradius-mode)
+#+END_SRC
+ 
