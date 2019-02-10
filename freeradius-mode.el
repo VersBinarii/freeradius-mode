@@ -4,6 +4,24 @@
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "24.4"))
 
+;;; License:
+;;  The MIT License (MIT)
+;; Copyright © 2019 Krzysztof Grobelak
+;; Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+;; and associated documentation files (the “Software”), to deal in the Software without
+;; restriction, including without limitation the rights to use, copy, modify, merge, publish,
+;; distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom
+;; the Software is furnished to do so, subject to the following conditions:
+
+;; The above copyright notice and this permission notice shall be included in all copies
+;; or substantial portions of the Software.
+;; THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+;; BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+;; NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+;; DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
 ;;; Commentary:
 
 ;; This major-mode provides syntax highlighting and indentation handling
@@ -19,67 +37,65 @@
   :group 'freeradius-mode)
 
 (defconst freeradius-keywords-regexp
-  (regexp-opt(
-			  list "if"
-				   "else"
-				   "elsif"
-				   "case"
-				   "switch"
-				   "update"
-				   "actions"
-				   "foreach"
-				   "load-balance"
-				   "parallel"
-				   "redundant"
-				   "redundant-load-balance"
-				   "subrequest")))
+  (regexp-opt (list "if"
+					"else"
+					"elsif"
+					"case"
+					"switch"
+					"update"
+					"actions"
+					"foreach"
+					"load-balance"
+					"parallel"
+					"redundant"
+					"redundant-load-balance"
+					"subrequest")))
 
 (defconst freeradius-constants-regexp
-  (regexp-opt(
-			  list "reply"
-				   "control"
-				   "request"
-				   "ok"
-				   "noop"
-				   "return"
-				   "fail"
-				   "reject"
-				   "notfound"
-				   "updated"
-				   "userlock"
-				   "invalid"
-				   "handled")))
+  (regexp-opt (list "reply"
+					"reply"
+					"control"
+					"request"
+					"ok"
+					"noop"
+					"return"
+					"fail"
+					"reject"
+					"notfound"
+					"updated"
+					"userlock"
+					"invalid"
+					"handled")))
 
 (defconst freeradius-font-lock-definitions
   (list
    ;; Define all keywords
    (cons freeradius-keywords-regexp font-lock-keyword-face)
-
+   
    ;; Constants
    (cons freeradius-constants-regexp font-lock-constant-face)
-
+   
    ;; Match all variables i.e. &Attr-Foo
-   (cons "&\\([-_[:alnum:]]+\\)" ' (1 font-lock-variable-name-face))
-
+   (cons "&\\([-_[:alnum:]]+\\)" '(1 font-lock-variable-name-face))
+   
    ;; Match all Tmp-* variables
-   (cons ".*\\(Tmp-[[:alpha:]]+-[[:digit:]]\\)" ' (1 font-lock-variable-name-face))
-
+   (cons ".*\\(Tmp-[[:alpha:]]+-[[:digit:]]\\)" '(1 font-lock-variable-name-face))
+   
    ;; Match all module/policy definitiions
-   (cons "^\\([-_[:alnum:]\\. ]+\\)[[:space:]]{" ' (1 font-lock-function-name-face))
-
+   (cons "^\\([-_[:alnum:]\\. ]+\\)[[:space:]]{" '(1 font-lock-function-name-face))
+   
    ;; Match all usages of modules in config files
-   (cons "^\\s-+\\([-_[:alnum:][:space:]\\.]+\\)[[:space:]]?{?$" ' (1 font-lock-function-name-face))
-
+   (cons "^\\s-+\\([-_[:alnum:][:space:]\\.]+\\)[[:space:]]?{?$" '(1 font-lock-function-name-face))
+   
    ;; Match various assignment types :=, ==, +=
-   (cons "^\\s-+\\([-_[:alnum:]]+\\)[[:space:]]*\\(:\\+\\|:\\|=\\|-\\|!|\\|>\\|<\\)?=[[:space:]]*.+"
-		 '(1 font-lock-variable-name-face))
+   (cons "^\\s-+\\([-_[:alnum:]]+\\)[[:space:]]*\\(:\\+\\|:\\|=\\|-\\|!|\\|>\\|<\\)?=[[:space:]]*.+" '(1 font-lock-variable-name-face))
+   
    ;; Match the xlat modules in %{} expansions
-   (cons "%{\\([[:alnum:]]+\\):.*}" ' (1 font-lock-builtin-face))
-
+   (cons "%{\\([[:alnum:]]+\\):.*}" '(1 font-lock-builtin-face))
+   
    ;; Highlight regexes
-   (cons "=~[[:space]]/\\(.*\\)/[ig]?" ' (1 font-lock-string-face))
-   )
-"A map of regular expressions to font-lock faces.")
+   (cons "=~[[:space]]?/\\(.*\\)/[ig]?" '(1 font-lock-string-face)))
+  "A map of regular expressions to font-lock faces.")
 
 
 (defun freeradius-get-indent-level()
@@ -97,7 +113,7 @@
 ;;;###autoload
 (define-derived-mode freeradius-mode fundamental-mode "freeradius mode"
   "Major mode for editing FreeRadius config files and unlang."
-
+  
   ;; Comments handling
   (modify-syntax-entry ?# "< b" freeradius-mode-syntax-table)
   (modify-syntax-entry ?\n "> b" freeradius-mode-syntax-table)
