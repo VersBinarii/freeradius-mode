@@ -49,7 +49,7 @@
 					"parallel"
 					"redundant"
 					"redundant-load-balance"
-					"subrequest")))
+					"subrequest") 'symbols))
 
 (defconst freeradius-constants-regexp
   (regexp-opt (list "reply"
@@ -65,7 +65,7 @@
 					"updated"
 					"userlock"
 					"invalid"
-					"handled")))
+					"handled") 'symbols))
 
 (defconst freeradius-font-lock-definitions
   (list
