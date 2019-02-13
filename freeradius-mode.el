@@ -128,5 +128,21 @@
   ;; Basic indentation handler
   (setq-local indent-line-function 'freeradius-indent-function))
 
+;;;###autoload
+;; Enable freeradius-mode for all file within the raddb directory
+
+; Match all files on sites-available and sites-enabled directory.
+(add-to-list 'auto-mode-alist
+			 '("raddb/sites-\\(?:available\\|enabled\\)/.*\\'" . freeradius-mode))
+; Match all files in modes-enabled, mods-avaialable and mods-config directory.
+(add-to-list 'auto-mode-alist
+			 '("raddb/mods-\\(?:available\\|enabled\\|config\\)/.*\\'" . freeradius-mode))
+; Match all the policy files.
+(add-to-list 'auto-mode-alist
+			 '("raddb/policy\\.d/.*\\'" . freeradius-mode))
+; Match all config files in the root of the raddb directory.
+(add-to-list 'auto-mode-alist
+			 '("raddb/.+\\.conf\\'" . freeradius-mode))
+
 (provide 'freeradius-mode)
 ;;; freeradius-mode.el ends here
