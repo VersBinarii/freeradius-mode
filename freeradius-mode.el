@@ -29,12 +29,13 @@
 
 ;;; Code:
 
-(defvar freeradius-mode-hook nil)
+(defgroup freeradius nil "freeradius-mode custimzation."
+  :group 'freeradius)
 
 (defcustom freeradius-indent-offset 4
   "Indent freeradius unlang code by this number of spaces."
   :type 'integer
-  :group 'freeradius-mode)
+  :group 'freeradius)
 
 (defconst freeradius-keywords-regexp
   (regexp-opt (list "if"
@@ -66,6 +67,14 @@
 					"userlock"
 					"invalid"
 					"handled") 'symbols))
+
+(defvar freeradius-mode-syntax-table
+  (let ((table (make-syntax-table)))
+	(modify-syntax-entry ?# "< b" table)
+	(modify-syntax-entry ?\n "> b" table)
+	(modify-syntax-entry ?\" "." table)
+	table))
+
 
 (defconst freeradius-font-lock-definitions
   (list
@@ -111,13 +120,13 @@
 	 (* freeradius-indent-offset (freeradius-get-indent-level)))))
 
 ;;;###autoload
-(define-derived-mode freeradius-mode fundamental-mode "freeradius mode"
+(define-derived-mode freeradius-mode prog-mode "FreeRadius"
   "Major mode for editing FreeRadius config files and unlang."
+
+  :syntax-table freeradius-mode-syntax-table
+  :group 'freeradius
   
   ;; Comments handling
-  (modify-syntax-entry ?# "< b" freeradius-mode-syntax-table)
-  (modify-syntax-entry ?\n "> b" freeradius-mode-syntax-table)
-  (modify-syntax-entry ?\" "." freeradius-mode-syntax-table)
   (setq-local comment-start "#")
   (setq-local comment-start-skip "#+\\s-*")
   (setq-local comment-end "\n")
@@ -131,18 +140,15 @@
 ;;;###autoload
 ;; Enable freeradius-mode for all file within the raddb directory
 
-; Match all files on sites-available and sites-enabled directory.
-(add-to-list 'auto-mode-alist
-			 '("raddb/sites-\\(?:available\\|enabled\\)/.*\\'" . freeradius-mode))
-; Match all files in modes-enabled, mods-avaialable and mods-config directory.
-(add-to-list 'auto-mode-alist
-			 '("raddb/mods-\\(?:available\\|enabled\\|config\\)/.*\\'" . freeradius-mode))
-; Match all the policy files.
-(add-to-list 'auto-mode-alist
-			 '("raddb/policy\\.d/.*\\'" . freeradius-mode))
-; Match all config files in the root of the raddb directory.
-(add-to-list 'auto-mode-alist
-			 '("raddb/.+\\.conf\\'" . freeradius-mode))
+(progn
+										; Match all files on sites-available and sites-enabled directory.
+  (add-to-list 'auto-mode-alist '("raddb/sites-\\(?:available\\|enabled\\)/.*\\'" . freeradius-mode))
+										; Match all files in modes-enabled, mods-avaialable and mods-config directory.
+  (add-to-list 'auto-mode-alist '("raddb/mods-\\(?:available\\|enabled\\|config\\)/.*\\'" . freeradius-mode))
+										; Match all the policy files.
+  (add-to-list 'auto-mode-alist '("raddb/policy\\.d/.*\\'" . freeradius-mode))
+										; Match all config files in the root of the raddb directory.
+  (add-to-list 'auto-mode-alist '("raddb/.+\\.conf\\'" . freeradius-mode)))
 
 (provide 'freeradius-mode)
 ;;; freeradius-mode.el ends here
